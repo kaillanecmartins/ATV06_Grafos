@@ -127,13 +127,16 @@ public class ListaLigada<TIPO>{
         }      
     }
     
-    public Object buscarPorIndex(int index){
-        Nodo atual = inicio;
-        
-        for(int i = 0; i < index; i++){
-            atual = atual.getProximo();
+    public TIPO buscarPorIndex(int index) {
+        if (index < 0 || index >= tamanho || inicio == null) {
+            return null;
+        } else {
+            Nodo atual = inicio;
+            for (int i = 0; i < index; i++) {
+                atual = atual.getProximo();
+            }
+            return (TIPO) atual.getInfo();
         }
-        return atual.getInfo();
     }
     
     @Override
