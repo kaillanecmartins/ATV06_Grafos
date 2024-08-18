@@ -1,65 +1,36 @@
 package Questao1;
 
-public class Aresta<TIPO> {
-    private Vertice<TIPO> inicio;
-    private Vertice<TIPO> fim;
-    private boolean isDirecionada;
-    private Double peso;
+public class Aresta {
+    private Vertice origem;
+    private Vertice destino;
+    private int peso; // Peso opcional
+    Aresta proxima;
 
-    public Aresta(Vertice<TIPO> inicio, Vertice<TIPO> fim, boolean isDirecionada, Double peso) {
-        this.inicio = inicio;
-        this.fim = fim;
-        this.isDirecionada = isDirecionada;
+    public Aresta(Vertice destino, int peso) {
+        this.destino = destino;
+        this.peso = peso;
+        this.proxima = null;
+    }
+
+    public Aresta(Vertice origem, Vertice destino, int peso) {
+        this.origem = origem;
+        this.destino = destino;
         this.peso = peso;
     }
 
-    public Aresta() {
+    public Aresta(Vertice origem, Vertice destino) {
+        this(origem, destino, 1); // Peso padrão = 1
     }
 
-    
-    
-    public Aresta(Vertice<TIPO> inicio, Vertice<TIPO> fim, boolean isDirecionada) {
-        this.inicio = inicio;
-        this.fim = fim;
-        this.isDirecionada = isDirecionada;
-        this.peso = 0.0;
+    public Vertice getOrigem() {
+        return origem;
     }
 
-    public Vertice<TIPO> getInicio() {
-        return inicio;
+    public Vertice getDestino() {
+        return destino;
     }
 
-    public void setInicio(Vertice<TIPO> inicio) {
-        this.inicio = inicio;
-    }
-
-    public Vertice<TIPO> getFim() {
-        return fim;
-    }
-
-    public void setFim(Vertice<TIPO> fim) {
-        this.fim = fim;
-    }
-
-    public boolean isIsDirecionada() {
-        return isDirecionada;
-    }
-
-    public void setIsDirecionada(boolean isDirecionada) {
-        this.isDirecionada = isDirecionada;
-    }
-
-    public Double getPeso() {
+    public int getPeso() {
         return peso;
     }
-
-    public void setPeso(Double peso) {
-        this.peso = peso;
-    }
-
-    @Override
-    public String toString() {
-        return "Aresta{" + "inicio:" + inicio + ", fim:" + fim + ", isDirecionada:" + isDirecionada + ", peso:" + peso + '}';
-    }
-    
 }

@@ -1,152 +1,122 @@
 package Questao1;
 
-import Util.*;
+import Util.Lista;
 
-public class Grafo<TIPO>{
-    private ListaLigada<Vertice<TIPO>> vertices;
-    private ListaLigada<Aresta<TIPO>> arestas;
-    private boolean isDirecionado;
+public class Grafo {
+    private Lista vertices;
+    private Lista arestas;
 
-    public Grafo(boolean isDirecionado) {
-        this.vertices = new ListaLigada<>();
-        this.arestas = new ListaLigada<>();
-        this.isDirecionado = isDirecionado;
-    }
-    
-    public Grafo(){
-        
-    }
-    
-    public void inserirVertice(Vertice<TIPO> vertice) {
-        vertices.inserir(vertice);
+    public Grafo() {
+        vertices = new Lista();
+        arestas = new Lista();
     }
 
-    public void removerVertice(Vertice<TIPO> vertice) {
-        vertices.remover(vertice);
-        // Também remova todas as arestas que têm este vértice como início ou fim
-        Nodo<Aresta<TIPO>> nodoAresta = arestas.getInicio();
-        while (nodoAresta != null) {
-            Aresta<TIPO> aresta = nodoAresta.getInfo();
-            if (aresta.getInicio().equals(vertice) || aresta.getFim().equals(vertice)) {
-                arestas.remover(aresta);
+    public void inserirVertice(String rotulo) {
+        Vertice vertice = new Vertice(rotulo);
+        vertices.adicionar(vertice);
+    }
+
+    public void removerVertice(String rotulo) {
+        Vertice vertice = pesquisarVertice(rotulo);
+        if (vertice != null) {
+            Object[] todasArestas = arestas.obterTodos();
+            for (Object obj : todasArestas) {
+                Aresta aresta = (Aresta) obj;
+                if (aresta.getOrigem().equals(vertice) || aresta.getDestino().equals(vertice)) {
+                    removerAresta(aresta.getOrigem().getRotulo(), aresta.getDestino().getRotulo());
+                }
             }
-            nodoAresta = nodoAresta.getProximo();
+            vertices.remover(vertice);
         }
     }
 
-    public void inserirAresta(Aresta<TIPO> aresta) {
-        arestas.inserir(aresta);
-    }
-
-    public void removerAresta(Aresta<TIPO> aresta) {
-        arestas.remover(aresta);
-    }
-    
-    public void inserirArestaDirecionada(Vertice<TIPO> inicio, Vertice<TIPO> fim, Double peso) {
-        Aresta<TIPO> arestaDirecionada = new Aresta<>(inicio, fim, true, peso);
-        arestas.inserir(arestaDirecionada);
-    }
-    
-    public Vertice<TIPO> pesquisarVertice(TIPO dado) {
-        Nodo<Vertice<TIPO>> nodoVertice = vertices.getInicio();
-        while (nodoVertice != null) {
-            Vertice<TIPO> vertice = nodoVertice.getInfo();
-            if (vertice.getDado().equals(dado)) {
+    public Vertice pesquisarVertice(String rotulo) {
+        Object[] todosVertices = vertices.obterTodos();
+        for (Object obj : todosVertices) {
+            Vertice vertice = (Vertice) obj;
+            if (vertice.getRotulo().equals(rotulo)) {
                 return vertice;
             }
-            nodoVertice = nodoVertice.getProximo();
         }
         return null;
     }
 
-    public Aresta<TIPO> pesquisarAresta(Vertice<TIPO> inicio, Vertice<TIPO> fim) {
-        Nodo<Aresta<TIPO>> nodoAresta = arestas.getInicio();
-        while (nodoAresta != null) {
-            Aresta<TIPO> aresta = nodoAresta.getInfo();
-            if (aresta.getInicio().equals(inicio) && aresta.getFim().equals(fim)) {
-                return aresta;
+    public void inserirAresta(String origem, String destino, int peso) {
+        Vertice verticeOrigem = pesquisarVertice(origem);
+        Vertice verticeDestino = pesquisarVertice(destino);
+        if (verticeOrigem != null && verticeDestino != null) {
+            Aresta aresta = new Aresta(verticeOrigem, verticeDestino, peso);
+            arestas.adicionar(aresta);
+            verticeOrigem.incrementarGrau();
+            verticeDestino.incrementarGrau();
+        }
+    }
+
+    public void inserirAresta(String origem, String destino) {
+        inserirAresta(origem, destino, 1);
+    }
+
+    public void removerAresta(String origem, String destino) {
+        Vertice verticeOrigem = pesquisarVertice(origem);
+        Vertice verticeDestino = pesquisarVertice(destino);
+        if (verticeOrigem != null && verticeDestino != null) {
+            Object[] todasArestas = arestas.obterTodos();
+            for (Object obj : todasArestas) {
+                Aresta aresta = (Aresta) obj;
+                if (aresta.getOrigem().equals(verticeOrigem) && aresta.getDestino().equals(verticeDestino)) {
+                    arestas.remover(aresta);
+                    verticeOrigem.decrementarGrau();
+                    verticeDestino.decrementarGrau();
+                    return;
+                }
             }
-            nodoAresta = nodoAresta.getProximo();
+        }
+    }
+
+    public Aresta pesquisarAresta(String origem, String destino) {
+        Vertice verticeOrigem = pesquisarVertice(origem);
+        Vertice verticeDestino = pesquisarVertice(destino);
+        if (verticeOrigem != null && verticeDestino != null) {
+            Object[] todasArestas = arestas.obterTodos();
+            for (Object obj : todasArestas) {
+                Aresta aresta = (Aresta) obj;
+                if (aresta.getOrigem().equals(verticeOrigem) && aresta.getDestino().equals(verticeDestino)) {
+                    return aresta;
+                }
+            }
         }
         return null;
     }
-    
-    public ListaLigada<Vertice<TIPO>> obterAdjacentes(Vertice<TIPO> vertice) {
-        ListaLigada<Vertice<TIPO>> adjacentes = new ListaLigada<>();
 
-        Nodo<Aresta<TIPO>> nodoAresta = arestas.getInicio();
-        while (nodoAresta != null) {
-            Aresta<TIPO> aresta = nodoAresta.getInfo();
-            if (aresta.getInicio().equals(vertice)) {
-                adjacentes.inserir(aresta.getFim());
+    public Object[] obterAdjacentes(String rotulo) {
+        Vertice vertice = pesquisarVertice(rotulo);
+        if (vertice != null) {
+            Lista adjacentes = new Lista();
+            Object[] todasArestas = arestas.obterTodos();
+            for (Object obj : todasArestas) {
+                Aresta aresta = (Aresta) obj;
+                if (aresta.getOrigem().equals(vertice)) {
+                    adjacentes.adicionar(aresta.getDestino());
+                } else if (aresta.getDestino().equals(vertice)) {
+                    adjacentes.adicionar(aresta.getOrigem());
+                }
             }
-            nodoAresta = nodoAresta.getProximo();
+            return adjacentes.obterTodos();
         }
-        return adjacentes;
+        return new Object[0];
     }
 
-    public void imprimirAdjacentes() {
-        Nodo<Vertice<TIPO>> nodoVertice = vertices.getInicio();
-        while (nodoVertice != null) {
-            Vertice<TIPO> vertice = nodoVertice.getInfo();
-            ListaLigada<Vertice<TIPO>> adjacentes = obterAdjacentes(vertice);
-
-            System.out.print("Vértice " + vertice.getDado() + " tem como adjacentes: ");
-            Nodo<Vertice<TIPO>> nodoAdjacente = adjacentes.getInicio();
-            while (nodoAdjacente != null) {
-                System.out.print(nodoAdjacente.getInfo().getDado() + " ");
-                nodoAdjacente = nodoAdjacente.getProximo();
+    public void imprimirGrafo() {
+        Object[] todosVertices = vertices.obterTodos();
+        for (Object obj : todosVertices) {
+            Vertice vertice = (Vertice) obj;
+            System.out.print("Vertice " + vertice.getRotulo() + " adjacente a: ");
+            Object[] adjacentes = obterAdjacentes(vertice.getRotulo());
+            for (Object adj : adjacentes) {
+                Vertice adjVertice = (Vertice) adj;
+                System.out.print(adjVertice.getRotulo() + " ");
             }
             System.out.println();
-
-            nodoVertice = nodoVertice.getProximo();
         }
     }
-    
-    public boolean contemCiclo() {
-        ListaLigada<Vertice<TIPO>> fila = new ListaLigada<>();
-
-        // Inicializa a fila com vértices de grau 1
-        Nodo<Vertice<TIPO>> nodoVertice = vertices.getInicio();
-        while (nodoVertice != null) {
-            if (nodoVertice.getInfo().getGrau() == 1) {
-                fila.inserir(nodoVertice.getInfo());
-            }
-            nodoVertice = nodoVertice.getProximo();
-        }
-
-        while (fila.getTamanho() > 0) {
-            Vertice<TIPO> verticeAtual = (Vertice<TIPO>) fila.retirarInicio();
-
-            // Visita os vértices adjacentes
-            ListaLigada<Vertice<TIPO>> adjacentes = obterAdjacentes(verticeAtual);
-            Nodo<Vertice<TIPO>> nodoAdjacente = adjacentes.getInicio();
-            while (nodoAdjacente != null) {
-                Vertice<TIPO> adjacente = nodoAdjacente.getInfo();
-
-                // Decrementa o grau do vértice adjacente
-                adjacente.setGrau(adjacente.getGrau() - 1);
-
-                // Se o grau do vértice adjacente se torna 1, insere na fila
-                if (adjacente.getGrau() == 1) {
-                    fila.inserir(adjacente);
-                }
-
-                nodoAdjacente = nodoAdjacente.getProximo();
-            }
-        }
-
-        // Verifica se existem vértices não visitados (com grau diferente de 0)
-        nodoVertice = vertices.getInicio();
-        while (nodoVertice != null) {
-            if (nodoVertice.getInfo().getGrau() > 0) {
-                return true; // Existe ciclo
-            }
-            nodoVertice = nodoVertice.getProximo();
-        }
-
-        return false; // Não há ciclo
-    }
-
 }
-

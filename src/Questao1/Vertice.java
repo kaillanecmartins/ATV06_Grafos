@@ -1,48 +1,41 @@
 package Questao1;
 
-import Util.*;
-
-public class Vertice<TIPO>{
-    private TIPO dado;
-    private ListaLigada<Aresta<TIPO>> arestas;
+public class Vertice {
+    private String rotulo;
     private int grau;
+    int tempoChegada;
+    int tempoPartida;
+    Vertice proximo;
 
-    public Vertice(TIPO dado) {
-        this.dado = dado;
-        this.arestas = new ListaLigada<>();
+    public Vertice(String rotulo) {
+        this.rotulo = rotulo;
         this.grau = 0;
+        this.proximo = null;
+        this.tempoChegada = -1;
+        this.tempoPartida = -1;
     }
 
-    public Vertice() {
-    }
-    
-    public TIPO getDado() {
-        return dado;
-    }
+    /*public Vertice(String rotulo) {
+        this.rotulo = rotulo;
+        this.grau = 0;
+    }*/
 
-    public void setDado(TIPO dado) {
-        this.dado = dado;
-    }
-
-    public ListaLigada<Aresta<TIPO>> getArestas() {
-        return arestas;
-    }
-
-    public void setArestas(ListaLigada<Aresta<TIPO>> arestas) {
-        this.arestas = arestas;
-    }
-
-    @Override
-    public String toString() {
-        return "Vertice{" + "dado:" + dado + '}';
+    public String getRotulo() {
+        return rotulo;
     }
 
     public int getGrau() {
         return grau;
     }
 
-    public void setGrau(int grau) {
-        this.grau = grau;
+    public void incrementarGrau() {
+        this.grau++;
     }
-    
+
+    public void decrementarGrau() {
+        if (this.grau > 0) {
+            this.grau--;
+        }
+    }
 }
+

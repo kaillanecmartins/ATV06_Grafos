@@ -1,0 +1,7 @@
+A atividade apresenta uma implementação de um grafo genérico, com classes para vértices e arestas.
+
+Utilizando a classe implementada em uma atividade anterior, a função contemCiclo
+da classe Questao2 verifica se um grafo não direcionado contém um ciclo.
+
+os dados para as questões são carregados a partir de um arquivo de texto presente no pacote Entradas.
+
