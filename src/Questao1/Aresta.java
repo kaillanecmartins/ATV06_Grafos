@@ -1,36 +1,35 @@
 package Questao1;
 
-public class Aresta {
-    private Vertice origem;
-    private Vertice destino;
-    private int peso; // Peso opcional
-    Aresta proxima;
+public class Aresta implements Comparable<Aresta> {
+    private Vertice verticeOrigem;
+    private Vertice verticeDestino;
+    private int peso;
 
-    public Aresta(Vertice destino, int peso) {
-        this.destino = destino;
-        this.peso = peso;
-        this.proxima = null;
-    }
-
-    public Aresta(Vertice origem, Vertice destino, int peso) {
-        this.origem = origem;
-        this.destino = destino;
+    public Aresta(Vertice verticeOrigem, Vertice verticeDestino, int peso) {
+        this.verticeOrigem = verticeOrigem;
+        this.verticeDestino = verticeDestino;
         this.peso = peso;
     }
 
-    public Aresta(Vertice origem, Vertice destino) {
-        this(origem, destino, 1); // Peso padrão = 1
+    public Vertice getVerticeOrigem() {
+        return verticeOrigem;
     }
 
-    public Vertice getOrigem() {
-        return origem;
-    }
-
-    public Vertice getDestino() {
-        return destino;
+    public Vertice getVerticeDestino() {
+        return verticeDestino;
     }
 
     public int getPeso() {
         return peso;
     }
+
+    public void setPeso(int peso) {
+        this.peso = peso;
+    }
+
+    @Override
+    public int compareTo(Aresta outraAresta) {
+        return Integer.compare(this.peso, outraAresta.getPeso());
+    }
 }
+

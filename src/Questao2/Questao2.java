@@ -5,6 +5,25 @@ import Util.LeituraArquivo;
 import java.util.StringTokenizer;
 
 public class Questao2 {
+    
+    public static void main(String[] args) {
+        Grafo grafo = new Grafo(true);
+
+        // Inserir vértices
+        grafo.inserirVertice("A");
+        grafo.inserirVertice("B");
+        grafo.inserirVertice("C");
+        grafo.inserirVertice("D");
+
+        // Inserir arestas
+        grafo.inserirAresta("A", "B", 0);
+        grafo.inserirAresta("A", "C", 0);
+        grafo.inserirAresta("B", "D", 0);
+        grafo.inserirAresta("C", "D", 0);
+
+        // Executar DFS e imprimir tempos de chegada e partida
+        grafo.executarDFS();
+    }
     /*public static void main(String[] args) {
         Grafo<String> grafo = new Grafo<>(false);
 
