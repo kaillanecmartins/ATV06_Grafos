@@ -7,7 +7,7 @@ public class Main {
 
         var grafo = ArquivoToGrafo.get("src/Entradas/dados_q6.txt", false);
 
-        System.out.println("---- Ciclo Mínimo (TSP Aproximado) ----");
+        System.out.println("---- QUESTÃO 6 ----");
         System.out.println( GeradoCiclo.execute(grafo));
     }
 }

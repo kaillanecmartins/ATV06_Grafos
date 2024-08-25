@@ -142,7 +142,6 @@ public class Grafo {
         }
     }
 
-    //TODO o normal não funciona direito então fiz outro
     public boolean verificarCiclo() {
         if(vertices.tamanho() < 3){
             return false;
@@ -161,7 +160,6 @@ public class Grafo {
         return false;
     }
 
-    //TODO também não funcionava e fiz outro
     private boolean verificarCicloDFS(Vertice atual,Vertice anterior, ListaLigada<Vertice> visitados) {
         visitados.adicionar(atual);
 
@@ -191,7 +189,7 @@ public class Grafo {
      // Método para executar DFS e calcular tempos de chegada e partida
     public void executarDFS() {
         boolean[] visitado = new boolean[vertices.tamanho()];
-        this.tempo = 0;
+        this.tempo = -1;
 
         for (int i = 0; i < vertices.tamanho(); i++) {
             Vertice vertice = vertices.get(i);

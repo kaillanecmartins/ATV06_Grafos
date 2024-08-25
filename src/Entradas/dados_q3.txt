@@ -1,6 +1,7 @@
 A;B
 B;C
 C;D
-D;E
-A;E
-E;A
+D;A
+E;D
+E;F
+F;A

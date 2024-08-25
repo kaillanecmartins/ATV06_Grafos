@@ -15,7 +15,7 @@ public class Vertice {
         this.rotulo = rotulo;
         this.grau = 0;
         this.adjacentes = new ListaLigada<>();
-        this.tempoChegada = -1; 
+        this.tempoChegada = -1;
         this.tempoPartida = -1;
     }
 

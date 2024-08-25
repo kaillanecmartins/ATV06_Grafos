@@ -1,7 +1,82 @@
 A atividade apresenta uma implementação de um grafo genérico, com classes para vértices e arestas.
 
-Utilizando a classe implementada em uma atividade anterior, a função contemCiclo
-da classe Questao2 verifica se um grafo não direcionado contém um ciclo.
-
 os dados para as questões são carregados a partir de um arquivo de texto presente no pacote Entradas.
 
+Questões:
+
+----> Q1:
+
+a Main do pacote Questão1 realiza funções simples como inserir, remover e imprimir um grafo após uma inserção prévia de
+arestas de um arquivo texto. Ao final é feito a verificação se o grafo comtém ciclo ou não.
+
+----> Q2:
+
+utilizando os dados fornecidos na questão, foi feito uma conversão do grafo apresentado para testar os tempos de chegada
+e de partida com mais precisão (levando em conta que o grafo exemplo já apresentava os valores).
+
+A conversão foi realizada da seguinte forma:
+
+0 - A
+1 - B
+2 - C
+3 - D
+4 - E
+5 - F
+6 - G
+7 - H
+
+Grafo resultante:
+
+A;B
+A;C
+C;D
+C;E
+D;F
+D;B
+E;F
+G;H
+
+----> Q3:
+
+De forma semelhante à questão anterior, foi utilizado para teste o grafo presente na imagem da questão.
+
+A conversão foi realizada da seguinte forma:
+
+0 - A
+1 - B
+2 - C
+3 - D
+4 - E
+5 - F
+
+Grafo resultante:
+
+A;B
+B;C
+C;D
+D;A
+E;D
+E;F
+F;A
+
+----> Q4:
+
+na questão foram utilizados como teste ambos os grafos presentes como exemplo na questão e ao final é mostrado o
+resultado de acordo com os requisitos solicitados.
+
+----> Q5:
+
+na questão, assim como foi solicitado, são utilizados os três algoritmos para fazer a verificação, e assim como nas
+questões anteriores foi utilizado o grafo exemplo na questão para realizar os testes.
+
+----> Q6:
+
+assim como nas questões anteriores, foi utilizado o grafo de exemplo para realizar os testes.
+
+----------------------------------
+
+os arquivos texto referentes a cada questão estão contidos no pacote/pasta Entradas e apresentam as nomenclatura padrão:
+
+dados_q[número referente à questão].txt
+
+ex: dados_q1.txt (arquivo com grafo referente a questão 1).
