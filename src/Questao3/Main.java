@@ -3,7 +3,7 @@ package Questao3;
 import Questao1.*;
 import Util.*;
 
-public class Questao3 {
+public class Main {
     public static void main(String[] args) {
         Grafo grafo = ArquivoToGrafo.get("src/Entradas/dados_q3.txt", true);
 

@@ -2,10 +2,6 @@ package Questao1;
 
 import Util.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-
 public class Grafo {
     private ListaLigada<Vertice> vertices;
     private boolean direcionado;
@@ -146,44 +142,8 @@ public class Grafo {
         }
     }
 
-    // Método para verificar se há ciclos no grafo usando DFS
-    public boolean verificarCiclo() {
-        boolean[] visitado = new boolean[vertices.tamanho()];
-        boolean[] pilhaRecursao = new boolean[vertices.tamanho()];
-
-        for (int i = 0; i < vertices.tamanho(); i++) {
-            if (verificarCicloDFS(vertices.get(i), visitado, pilhaRecursao)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean verificarCicloDFS(Vertice vertice, boolean[] visitado, boolean[] pilhaRecursao) {
-        int indiceVertice = obterIndiceVertice(vertice.getRotulo());
-
-        if (indiceVertice == -1) return false;
-
-        if (pilhaRecursao[indiceVertice]) return true;
-        if (visitado[indiceVertice]) return false;
-
-        visitado[indiceVertice] = true;
-        pilhaRecursao[indiceVertice] = true;
-
-        ListaLigada<Aresta> adjacentes = vertice.getAdjacentes();
-        for (int i = 0; i < adjacentes.tamanho(); i++) {
-            Vertice verticeAdjacente = adjacentes.get(i).getVerticeDestino();
-            if (verificarCicloDFS(verticeAdjacente, visitado, pilhaRecursao)) {
-                return true;
-            }
-        }
-
-        pilhaRecursao[indiceVertice] = false;
-        return false;
-    }
-
     //TODO o normal não funciona direito então fiz outro
-    public boolean verificarCiclo2() {
+    public boolean verificarCiclo() {
         if(vertices.tamanho() < 3){
             return false;
         }
@@ -193,7 +153,7 @@ public class Grafo {
         for (int i = 0; i < vertices.tamanho(); i++) {
             var verticeAtual = vertices.get(i);
             if(!visitados.pesquisar(verticeAtual)){
-                if(verificarCicloDFS2(verticeAtual, null, visitados)){
+                if(verificarCicloDFS(verticeAtual, null, visitados)){
                     return true;
                 }
             }
@@ -202,14 +162,14 @@ public class Grafo {
     }
 
     //TODO também não funcionava e fiz outro
-    private boolean verificarCicloDFS2(Vertice atual,Vertice anterior, ListaLigada<Vertice> visitados) {
+    private boolean verificarCicloDFS(Vertice atual,Vertice anterior, ListaLigada<Vertice> visitados) {
         visitados.adicionar(atual);
 
         var vizinhos = atual.getAdjacentes();
         for (int i = 0; i < vizinhos.tamanho(); i++) {
             var verticeAtual = vizinhos.get(i).getVerticeDestino();
             if(!visitados.pesquisar(verticeAtual)){
-                if(verificarCicloDFS2(verticeAtual, atual, visitados)){
+                if(verificarCicloDFS(verticeAtual, atual, visitados)){
                     return true;
                 }
             } else if (verticeAtual != anterior && anterior != null) {
@@ -390,200 +350,6 @@ public class Grafo {
             }
         }
         System.out.println();
-    }
-    
-    // Algoritmo de Prim
-    /*public void mstPrim(String verticeInicial) {
-        Vertice verticeInicio = pesquisarVertice(verticeInicial);
-        if (verticeInicio == null) {
-            throw new IllegalArgumentException("Vértice inicial não encontrado.");
-        }
-
-        MinHeap heap = new MinHeap(arestas.tamanho());
-        ListaLigada<Aresta> mst = new ListaLigada<>();
-        boolean[] visitado = new boolean[vertices.tamanho()];
-
-        adicionarArestasAdjacentes(heap, verticeInicio, visitado);
-
-        while (!heap.estaVazio()) {
-            Aresta arestaMin = heap.extrairMin();
-            Vertice v = arestaMin.getVerticeDestino();
-
-            if (!visitado[obterIndiceVertice(v.getRotulo())]) {
-                mst.adicionar(arestaMin);
-                adicionarArestasAdjacentes(heap, v, visitado);
-            }
-        }
-
-        imprimirMST("Prim", mst);
-    }*/
-    /*
-    // Algoritmo de Kruskal
-    public void mstKruskal() {
-        ListaLigada<Aresta> mst = new ListaLigada<>();
-        ConjuntoDisjunto conjunto = new ConjuntoDisjunto(vertices.tamanho());
-
-        // Ordena as arestas pelo peso
-        ordenarArestasPorPeso();
-
-        for (int i = 0; i < arestas.tamanho(); i++) {
-            Aresta aresta = arestas.get(i);
-            int origem = obterIndiceVertice(aresta.getVerticeOrigem().getRotulo());
-            int destino = obterIndiceVertice(aresta.getVerticeDestino().getRotulo());
-
-            if (conjunto.encontrar(origem) != conjunto.encontrar(destino)) {
-                mst.adicionar(aresta);
-                conjunto.unir(origem, destino);
-            }
-        }
-
-        imprimirMST("Kruskal", mst);
-    }
-
-    private void ordenarArestasPorPeso() {
-        // Algoritmo de ordenação simples para ordenar arestas pelo peso
-        for (int i = 0; i < arestas.tamanho(); i++) {
-            for (int j = 0; j < arestas.tamanho() - i - 1; j++) {
-                if (arestas.get(j).compareTo(arestas.get(j + 1)) > 0) {
-                    Aresta temp = arestas.get(j);
-                    arestas.remover(temp);
-                    arestas.adicionar(temp);
-                }
-            }
-        }
-    }
-
-    // Algoritmo de Boruvka
-    public void mstBoruvka() {
-        ListaLigada<Aresta> mst = new ListaLigada<>();
-        ConjuntoDisjunto conjunto = new ConjuntoDisjunto(vertices.tamanho());
-
-        int componentes = vertices.tamanho();
-
-        while (componentes > 1) {
-            Aresta[] menorAresta = new Aresta[vertices.tamanho()];
-
-            for (int i = 0; i < arestas.tamanho(); i++) {
-                Aresta aresta = arestas.get(i);
-                int origem = conjunto.encontrar(obterIndiceVertice(aresta.getVerticeOrigem().getRotulo()));
-                int destino = conjunto.encontrar(obterIndiceVertice(aresta.getVerticeDestino().getRotulo()));
-
-                if (origem != destino) {
-                    if (menorAresta[origem] == null || aresta.getPeso() < menorAresta[origem].getPeso()) {
-                        menorAresta[origem] = aresta;
-                    }
-
-                    if (menorAresta[destino] == null || aresta.getPeso() < menorAresta[destino].getPeso()) {
-                        menorAresta[destino] = aresta;
-                    }
-                }
-            }
-
-            for (int i = 0; i < menorAresta.length; i++) {
-                if (menorAresta[i] != null) {
-                    int origem = conjunto.encontrar(obterIndiceVertice(menorAresta[i].getVerticeOrigem().getRotulo()));
-                    int destino = conjunto.encontrar(obterIndiceVertice(menorAresta[i].getVerticeDestino().getRotulo()));
-
-                    if (origem != destino) {
-                        mst.adicionar(menorAresta[i]);
-                        conjunto.unir(origem, destino);
-                        componentes--;
-                    }
-                }
-            }
-        }
-
-        imprimirMST("Boruvka", mst);
-    }
-
-    // Método auxiliar para imprimir a MST gerada
-    private void imprimirMST(String algoritmo, ListaLigada<Aresta> mst) {
-        System.out.println("MST usando " + algoritmo + ":");
-        for (int i = 0; i < mst.tamanho(); i++) {
-            Aresta aresta = mst.get(i);
-            System.out.println(aresta.getVerticeOrigem().getRotulo() + " - " +
-                               aresta.getVerticeDestino().getRotulo() + " : " +
-                               aresta.getPeso());
-        }
-    }
-    
-    // Algoritmo de Prim para gerar MST
-    public Grafo mstPrim(String verticeInicial) {
-        Vertice verticeInicio = pesquisarVertice(verticeInicial);
-        if (verticeInicio == null) {
-            throw new IllegalArgumentException("Vértice inicial não encontrado.");
-        }
-
-        Grafo mst = new Grafo(false);  // MST será um novo grafo não direcionado
-        mst.inserirVertice(verticeInicio.getRotulo());
-
-        MinHeap heap = new MinHeap(arestas.tamanho());
-        boolean[] visitado = new boolean[vertices.tamanho()];
-
-        adicionarArestasAdjacentes(heap, verticeInicio, visitado);
-
-        while (!heap.estaVazio()) {
-            Aresta arestaMin = heap.extrairMin();
-            Vertice v = arestaMin.getVerticeDestino();
-
-            if (!visitado[obterIndiceVertice(v.getRotulo())]) {
-                mst.inserirVertice(v.getRotulo());
-                mst.inserirAresta(arestaMin.getVerticeOrigem().getRotulo(), v.getRotulo(), arestaMin.getPeso());
-                adicionarArestasAdjacentes(heap, v, visitado);
-            }
-        }
-
-        return mst;
-    }
-
-    private void adicionarArestasAdjacentes(MinHeap heap, Vertice vertice, boolean[] visitado) {
-        int indice = obterIndiceVertice(vertice.getRotulo());
-        visitado[indice] = true;
-
-        ListaLigada<Aresta> adjacentes = vertice.getAdjacentes();
-        for (int i = 0; i < adjacentes.tamanho(); i++) {
-            Aresta aresta = adjacentes.get(i);
-            if (!visitado[obterIndiceVertice(aresta.getVerticeDestino().getRotulo())]) {
-                heap.inserir(aresta);
-            }
-        }
-    }
-
-    // Algoritmo DFS para encontrar o ciclo mínimo (TSP aproximado)
-    public void cicloMinimoDFS(String verticeInicial) {
-        Grafo mst = mstPrim(verticeInicial);
-        boolean[] visitado = new boolean[mst.vertices.tamanho()];
-        ListaLigada<Vertice> ciclo = new ListaLigada<>();
-
-        Vertice verticeInicio = mst.pesquisarVertice(verticeInicial);
-        mst.dfsCiclo(verticeInicio, visitado, ciclo);
-
-        // Conectando o último vértice ao inicial para formar um ciclo
-        Vertice ultimo = ciclo.get(ciclo.tamanho() - 1);
-        System.out.println(ultimo.getRotulo() + " -> " + verticeInicial + " (retorno ao início)");
-
-        // Imprimindo o ciclo
-        imprimirCiclo(ciclo);
-    }
-
-    private void dfsCiclo(Vertice vertice, boolean[] visitado, ListaLigada<Vertice> ciclo) {
-        int indice = obterIndiceVertice(vertice.getRotulo());
-        visitado[indice] = true;
-        ciclo.adicionar(vertice);
-
-        ListaLigada<Aresta> adjacentes = vertice.getAdjacentes();
-        for (int i = 0; i < adjacentes.tamanho(); i++) {
-            Vertice v = adjacentes.get(i).getVerticeDestino();
-            if (!visitado[obterIndiceVertice(v.getRotulo())]) {
-                dfsCiclo(v, visitado, ciclo);
-            }
-        }
-    }*/
-
-    private void imprimirCiclo(ListaLigada<Vertice> ciclo) {
-        for (int i = 0; i < ciclo.tamanho() - 1; i++) {
-            System.out.println(ciclo.get(i).getRotulo() + " -> " + ciclo.get(i + 1).getRotulo());
-        }
     }
 
     //TODO

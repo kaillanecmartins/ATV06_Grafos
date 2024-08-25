@@ -37,7 +37,7 @@ public class Kruskal {
                 pesoTotal += arestaAtual.getPeso();
 
                 //Se gerar um ciclo, remove a aresta
-                if(grafoParaCiclo.verificarCiclo2()){
+                if(grafoParaCiclo.verificarCiclo()){
                     grafoParaCiclo.removerAresta(vertA,vertB);
                     resultado.remover(arestaAtual);
                     pesoTotal -= arestaAtual.getPeso();
