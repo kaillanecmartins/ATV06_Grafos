@@ -1,46 +1,52 @@
 package Questao1;
 
+import Util.ArquivoToGrafo;
+import Util.LeituraArquivo;
+
+import java.util.StringTokenizer;
+
 public class Main {
     public static void main(String[] args) {
-        // Criando um grafo direcionado
         Grafo grafo = new Grafo(true);
 
-        // Teste de inserção de vértices
-        grafo.inserirVertice("A");
-        grafo.inserirVertice("B");
-        grafo.inserirVertice("C");
+        LeituraArquivo arq = new LeituraArquivo("src/Entradas/dados_q1.txt");
+        StringTokenizer str;
+        int count = 1;
+        String dados = arq.lerEnesima(count).toString();
+        String aux;
 
-        // Teste de inserção de arestas
-        grafo.inserirAresta("A", "B", 5);
-        grafo.inserirAresta("B", "C", 3);
-        //grafo.inserirAresta("C", "A", 2);
+        System.out.println("------QUESTAO 1------");
 
-        // Imprimir o grafo
-        System.out.println("Grafo direcionado:");
+        /*
         grafo.imprimirGrafo();
 
-        // Verificação de ciclo
-        boolean haCiclo = grafo.verificarCiclo();
-        System.out.println("\nO grafo tem ciclo? " + haCiclo);
+        while (dados != null) {
+            str = new StringTokenizer(dados, ";");
+            if (str.hasMoreElements()) {
+                aux = str.nextToken();
+                Vertice v1 = new Vertice(aux);
+                if (grafo.pesquisarVertice(aux) != null) {
+                    grafo.inserirVertice(v1.getRotulo());
+                }
+                aux = str.nextToken();
+                Vertice v2 = new Vertice(aux);
+                if (grafo.pesquisarVertice(aux) != null) {
+                    grafo.inserirVertice(v2.getRotulo());
+                }
+                Aresta aresta = new Aresta(v1, v2, 0);
+                grafo.inserirAresta(v1.getRotulo(), v2.getRotulo(), aresta.getPeso());
+            }
+            count++;
+            try {
+                dados = arq.lerEnesima(count).toString();
+            } catch (Exception e) {
+                break;
+            }
+        }*/
 
-        // Criando um grafo não direcionado
-        Grafo grafoNaoDirecionado = new Grafo(false);
-
-        // Teste de inserção de vértices
-        grafoNaoDirecionado.inserirVertice("A");
-        grafoNaoDirecionado.inserirVertice("B");
-        grafoNaoDirecionado.inserirVertice("C");
-
-        // Teste de inserção de arestas
-        grafoNaoDirecionado.inserirAresta("A", "B", 5);
-        grafoNaoDirecionado.inserirAresta("B", "C", 3);
-
-        // Imprimir o grafo
-        System.out.println("\nGrafo não direcionado:");
-        grafoNaoDirecionado.imprimirGrafo();
-
-        // Verificação de ciclo
-        haCiclo = grafoNaoDirecionado.verificarCiclo();
-        System.out.println("\nO grafo não direcionado tem ciclo? " + haCiclo);
+        grafo = ArquivoToGrafo.get("src/Entradas/dados_q1.txt", true);
+        grafo.imprimirGrafo();
+        // Executar DFS e imprimir tempos de chegada e partida
+        grafo.executarDFS();
     }
 }

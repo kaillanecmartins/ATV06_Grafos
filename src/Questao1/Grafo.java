@@ -2,6 +2,10 @@ package Questao1;
 
 import Util.*;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
 public class Grafo {
     private ListaLigada<Vertice> vertices;
     private boolean direcionado;
@@ -20,6 +24,14 @@ public class Grafo {
         vertices.adicionar(new Vertice(rotulo));
     }
 
+    //TODO
+    public ListaLigada<String> getAllVertices(){
+        var result = new ListaLigada<String>();
+        for (int i = 0; i < vertices.tamanho(); i++) {
+            result.adicionar(vertices.get(i).getRotulo());
+        }
+        return result;
+    }
     public void removerVertice(String rotulo) {
         Vertice vertice = pesquisarVertice(rotulo);
         if (vertice == null) {
@@ -109,7 +121,9 @@ public class Grafo {
         }
         return null;
     }
-
+    public int tamanhoVertice(){
+        return vertices.tamanho();
+    }
     public ListaLigada<Vertice> obterAdjacentes(String rotulo) {
         Vertice vertice = pesquisarVertice(rotulo);
         ListaLigada<Vertice> adjacentes = new ListaLigada<>();
@@ -147,6 +161,7 @@ public class Grafo {
 
     private boolean verificarCicloDFS(Vertice vertice, boolean[] visitado, boolean[] pilhaRecursao) {
         int indiceVertice = obterIndiceVertice(vertice.getRotulo());
+
         if (indiceVertice == -1) return false;
 
         if (pilhaRecursao[indiceVertice]) return true;
@@ -167,6 +182,43 @@ public class Grafo {
         return false;
     }
 
+    //TODO o normal não funciona direito então fiz outro
+    public boolean verificarCiclo2() {
+        if(vertices.tamanho() < 3){
+            return false;
+        }
+
+        ListaLigada<Vertice> visitados = new ListaLigada<>();
+
+        for (int i = 0; i < vertices.tamanho(); i++) {
+            var verticeAtual = vertices.get(i);
+            if(!visitados.pesquisar(verticeAtual)){
+                if(verificarCicloDFS2(verticeAtual, null, visitados)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //TODO também não funcionava e fiz outro
+    private boolean verificarCicloDFS2(Vertice atual,Vertice anterior, ListaLigada<Vertice> visitados) {
+        visitados.adicionar(atual);
+
+        var vizinhos = atual.getAdjacentes();
+        for (int i = 0; i < vizinhos.tamanho(); i++) {
+            var verticeAtual = vizinhos.get(i).getVerticeDestino();
+            if(!visitados.pesquisar(verticeAtual)){
+                if(verificarCicloDFS2(verticeAtual, atual, visitados)){
+                    return true;
+                }
+            } else if (verticeAtual != anterior && anterior != null) {
+                return true;
+                
+            }
+        }
+        return false;
+    }
     private int obterIndiceVertice(String rotulo) {
         for (int i = 0; i < vertices.tamanho(); i++) {
             if (vertices.get(i).getRotulo().equals(rotulo)) {
@@ -341,7 +393,7 @@ public class Grafo {
     }
     
     // Algoritmo de Prim
-    public void mstPrim(String verticeInicial) {
+    /*public void mstPrim(String verticeInicial) {
         Vertice verticeInicio = pesquisarVertice(verticeInicial);
         if (verticeInicio == null) {
             throw new IllegalArgumentException("Vértice inicial não encontrado.");
@@ -364,8 +416,8 @@ public class Grafo {
         }
 
         imprimirMST("Prim", mst);
-    }
-    
+    }*/
+    /*
     // Algoritmo de Kruskal
     public void mstKruskal() {
         ListaLigada<Aresta> mst = new ListaLigada<>();
@@ -526,7 +578,7 @@ public class Grafo {
                 dfsCiclo(v, visitado, ciclo);
             }
         }
-    }
+    }*/
 
     private void imprimirCiclo(ListaLigada<Vertice> ciclo) {
         for (int i = 0; i < ciclo.tamanho() - 1; i++) {
@@ -534,4 +586,39 @@ public class Grafo {
         }
     }
 
+    //TODO
+    @Override
+    public String toString(){
+        StringBuilder resultado = new StringBuilder();
+        resultado.append("Grafo {");
+        for (int i = 0; i < vertices.tamanho(); i++) {
+            var vertice = vertices.get(i);
+            //resultado.append(vertice.getRotulo()).append(": ");
+            var vizinhos = vertice.getAdjacentes();
+            if (vizinhos.tamanho() == 0){
+                resultado.append("(").append(vertice).append(")");
+            }
+            else
+                resultado.append(vizinhos);
+//            for (int j = 0; j < vertice.getAdjacentes().tamanho(); j++) {
+//                resultado.append(vertice.getAdjacentes().get(j).getVerticeDestino().getRotulo()).append(" ");
+//            }
+            if(i != vertices.tamanho() - 1)
+                resultado.append(" ");
+        }
+        return resultado.append("}").toString();
+    }
+
+    //TODO altamente necessário para BORUVKA
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Grafo grafo = (Grafo) o;
+        boolean verticesIguais = grafo.vertices.pesquisar(vertices.get(0));
+        for (int i = 1; i < vertices.tamanho(); i++) {
+            verticesIguais &= grafo.vertices.pesquisar(vertices.get(i));
+        }
+        return direcionado == grafo.direcionado && verticesIguais;
+    }
 }

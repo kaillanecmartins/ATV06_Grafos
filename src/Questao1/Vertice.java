@@ -2,19 +2,21 @@ package Questao1;
 
 import Util.ListaLigada;
 
+import java.util.Objects;
+
 public class Vertice {
     private String rotulo;
     private int grau;
     private ListaLigada<Aresta> adjacentes;
     private int tempoChegada; 
     private int tempoPartida;   
-
+    private boolean visitado;
     public Vertice(String rotulo) {
         this.rotulo = rotulo;
         this.grau = 0;
         this.adjacentes = new ListaLigada<>();
         this.tempoChegada = -1; 
-        this.tempoPartida = -1;  
+        this.tempoPartida = -1;
     }
 
     public String getRotulo() {
@@ -66,6 +68,11 @@ public class Vertice {
 
     public void setTempoPartida(int tempoPartida) {
         this.tempoPartida = tempoPartida;
+    }
+
+    @Override
+    public String toString(){
+        return rotulo;
     }
 }
 

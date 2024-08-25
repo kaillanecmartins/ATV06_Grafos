@@ -1,5 +1,7 @@
 package Questao1;
 
+import java.util.Objects;
+
 public class Aresta implements Comparable<Aresta> {
     private Vertice verticeOrigem;
     private Vertice verticeDestino;
@@ -31,5 +33,22 @@ public class Aresta implements Comparable<Aresta> {
     public int compareTo(Aresta outraAresta) {
         return Integer.compare(this.peso, outraAresta.getPeso());
     }
+
+    @Override
+    public String toString(){
+        return String.format("( %s, %s)", verticeOrigem.getRotulo(), verticeDestino.getRotulo());
+    }
+
+    //TODO
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Aresta aresta = (Aresta) o;
+        return peso == aresta.peso
+                && verticeOrigem.equals(aresta.verticeOrigem)
+                && verticeDestino.equals(aresta.verticeDestino);
+    }
+
 }
 

@@ -5,22 +5,7 @@ import Util.*;
 
 public class Questao3 {
     public static void main(String[] args) {
-        Grafo grafo = new Grafo(true);
-
-        // Inserir vértices
-        grafo.inserirVertice("A");
-        grafo.inserirVertice("B");
-        grafo.inserirVertice("C");
-        grafo.inserirVertice("D");
-        grafo.inserirVertice("E");
-
-        // Inserir arestas
-        grafo.inserirAresta("A", "B", 0);
-        grafo.inserirAresta("B", "C", 0);
-        grafo.inserirAresta("C", "D", 0);
-        grafo.inserirAresta("D", "E", 0);
-        grafo.inserirAresta("A", "E", 0);
-        grafo.inserirAresta("E", "A", 0);
+        Grafo grafo = ArquivoToGrafo.get("src/Entradas/dados_q3.txt", true);
 
         // Verificar vértices raiz
         ListaLigada<Vertice> verticesRaiz = grafo.verificarVerticesRaiz();
